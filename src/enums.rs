@@ -18,13 +18,13 @@ macro_rules! u32_try_from {
         }
 
         impl std::convert::TryFrom<u32> for $name {
-            type Error = workflow_allocator::enums::TryFromError;
+            type Error = workflow_core::enums::TryFromError;
 
-            fn try_from(v: u32) -> std::result::Result<Self, workflow_allocator::enums::TryFromError> {
+            fn try_from(v: u32) -> std::result::Result<Self, workflow_core::enums::TryFromError> {
                 match v {
                     $(x if x == $name::$vname as u32 => Ok($name::$vname),)*
                     _ => {
-                        Err(workflow_allocator::enums::TryFromError::u32(stringify!($name),v))
+                        Err(workflow_core::enums::TryFromError::u32(stringify!($name),v))
                     },
                 }
             }
@@ -45,13 +45,13 @@ macro_rules! u16_try_from {
         }
 
         impl std::convert::TryFrom<u16> for $name {
-            type Error = workflow_allocator::enums::TryFromError;
+            type Error = workflow_core::enums::TryFromError;
 
-            fn try_from(v: u16) -> std::result::Result<Self, workflow_allocator::enums::TryFromError> {
+            fn try_from(v: u16) -> std::result::Result<Self, workflow_core::enums::TryFromError> {
                 match v {
                     $(x if x == $name::$vname as u16 => Ok($name::$vname),)*
                     _ => {
-                        Err(workflow_allocator::enums::TryFromError::u16(stringify!($name),v))
+                        Err(workflow_core::enums::TryFromError::u16(stringify!($name),v))
                     },
                 }
             }
@@ -78,13 +78,13 @@ macro_rules! u8_try_from {
         }
 
         impl std::convert::TryFrom<u8> for $name {
-            type Error = workflow_allocator::enums::TryFromError;
+            type Error = workflow_core::enums::TryFromError;
 
-            fn try_from(v: u8) -> std::result::Result<Self, workflow_allocator::enums::TryFromError> {
+            fn try_from(v: u8) -> std::result::Result<Self, workflow_core::enums::TryFromError> {
                 match v {
                     $(x if x == $name::$vname as u8 => Ok($name::$vname),)*
                     _ => {
-                        Err(workflow_allocator::enums::TryFromError::u8(stringify!($name),v))
+                        Err(workflow_core::enums::TryFromError::u8(stringify!($name),v))
                     },
                 }
             }
@@ -105,13 +105,13 @@ macro_rules! usize_try_from {
         }
 
         impl std::convert::TryFrom<usize> for $name {
-            type Error = workflow_allocator::enums::TryFromError;
+            type Error = workflow_core::enums::TryFromError;
 
-            fn try_from(v: usize) -> std::result::Result<Self, workflow_allocator::enums::TryFromError> {
+            fn try_from(v: usize) -> std::result::Result<Self, workflow_core::enums::TryFromError> {
                 match v {
                     $(x if x == $name::$vname as usize => Ok($name::$vname),)*
                     _ => {
-                        Err(workflow_allocator::enums::TryFromError::u32(stringify!($name),v))
+                        Err(workflow_core::enums::TryFromError::u32(stringify!($name),v))
                     },
                 }
             }

@@ -1,3 +1,5 @@
+extern crate self as workflow_core;
+
 pub mod enums;
 pub mod utils;
 

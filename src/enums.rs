@@ -1,3 +1,15 @@
+
+pub use workflow_core_macros::describe_enum;
+pub trait EnumTrait<T> {
+    fn list()->Vec<T>;
+    fn descr(&self)->&'static str;
+    fn as_str(&self)->&'static str;
+    fn as_str_ns(&self)->&'static str;
+    fn from_str(str:&str)->Option<T>;
+    fn from_str_ns(str:&str)->Option<T>;
+}
+
+
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 pub enum TryFromError {

@@ -168,7 +168,7 @@ pub fn macro_handler(_attr: TokenStream, item: TokenStream) -> TokenStream {
             }
         }
 
-        impl workflow_ux::enums::EnumTrait<#enum_name> for #enum_name {
+        impl workflow_core::enums::EnumTrait<#enum_name> for #enum_name {
             fn list() -> Vec<#enum_name> {
                 #enum_name::list()
             }
@@ -178,9 +178,19 @@ pub fn macro_handler(_attr: TokenStream, item: TokenStream) -> TokenStream {
             fn as_str(&self) -> &'static str {
                 self.as_str()
             }
-
+            fn as_str_ns(&self)->&'static str{
+                match self {
+                    #( #enum_name::#entries => { #strings_ns.into() }),*
+                }
+            }
             fn from_str(str:&str)->Option<#enum_name>{
                 #enum_name::from_str(str)
+            }
+            fn from_str_ns(str:&str)->Option<#enum_name>{
+                match str {
+                    #( #strings_ns => { Some(#enum_name::#entries) }),*
+                    _ => None
+                }
             }
         }
 

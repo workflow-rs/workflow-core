@@ -11,3 +11,4 @@ workflow-core-macros = { path = "macros/" }
 [target.'cfg(not(target_arch = "bpf"))'.dependencies]
 async-std = { version = "1.12.0", features = ['attributes'] }
 futures = "0.3.21"
+manual_future = "0.1.1"

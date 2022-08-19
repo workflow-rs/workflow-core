@@ -4,6 +4,6 @@ pub mod enums;
 pub mod utils;
 
 #[cfg(not(target_arch = "bpf"))]
-pub mod task;
+pub mod sync;
 
 pub use workflow_core_macros::describe_enum;

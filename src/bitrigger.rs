@@ -1,6 +1,7 @@
 
 use triggered::{Trigger,Listener};
 
+/// Wrapper containing a single Trigger instance
 #[derive(Debug, Clone)]
 pub struct TriggerInstance {
     pub trigger : Trigger,
@@ -17,6 +18,8 @@ impl TriggerInstance {
     }
 }
 
+/// Bi-directional trigger meant to function in
+/// request/response fashion
 #[derive(Debug, Clone)]
 pub struct BiTrigger {
     pub request : TriggerInstance,

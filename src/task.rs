@@ -2,34 +2,18 @@
 use std::sync::{Arc, Mutex};
 use futures::Future;
 
-// pub fn spawn<T>(future: T) -> JoinHandle<T::Output>
-// where
-//     T: Future + Send + 'static,
-//     T::Output: Send + 'static,
+pub use async_std::task::yield_now;
+pub use async_std::task::sleep;
 
 #[cfg(not(any(target_arch = "wasm32", target_arch = "bpf")))]
 pub mod native {
-    // use tokio::task::JoinHandle;
-
-    // pub async fn yield_now() {
-    //     tokio::task::yield_now().await
-    // }
 
     pub use super::*;
     pub fn spawn<F, T>(future: F)
     where
         F: Future<Output = T> + Send + 'static,
         T: Send + 'static,
-
-    // pub fn spawn<T>(future: T)// -> JoinHandle<T::Output>
-    // where
-    //     T: Future + Send + 'static,
-    //     T::Output: Send + 'static,
-
-
     {
-        // let _result = async_std::task::spawn(async {
-        // let _result = 
         tokio::task::spawn(async {
             future.await
         });

@@ -17,11 +17,8 @@ cfg_if! {
                 bounded(1)
             }
         }
-        /// bi-directional (req/resp) trigger
-        pub mod bitrigger;
-        /// trigger re-expor
-        pub mod trigger {
-            pub use triggered::*;
-        }
+        /// re-exports triggered crate as well as
+        /// two wrappers SingleTrigger and ReqRespTrigger
+        pub mod trigger;
     }
 }

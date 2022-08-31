@@ -11,7 +11,7 @@ use syn::{
     parse_macro_input,
     DeriveInput,
 };
-use workflow_macro::attributes::*;
+use workflow_macro_tools::attributes::*;
 
 #[derive(Debug)]
 struct Enum {

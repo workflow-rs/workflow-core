@@ -3,6 +3,7 @@ extern crate self as workflow_core;
 
 pub mod enums;
 pub mod utils;
+// pub mod time;
 
 pub use workflow_core_macros::describe_enum;
 
@@ -20,5 +21,9 @@ cfg_if! {
         /// re-exports triggered crate as well as
         /// two wrappers SingleTrigger and ReqRespTrigger
         pub mod trigger;
+
+        pub mod time {
+            pub use instant::*;
+        }
     }
 }

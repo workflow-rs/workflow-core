@@ -3,11 +3,10 @@ name = "workflow-core"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 workflow-core-macros = { path = "macros/" }
 cfg-if = "1.0.0"
+borsh = "0.9.1"
 
 [target.'cfg(not(target_arch = "bpf"))'.dependencies]
 async-std = { version = "1.12.0", features = ['attributes'] }
@@ -15,6 +14,13 @@ futures = "0.3.21"
 manual_future = "0.1.1"
 thiserror = "1.0.0"
 triggered = "0.1.2"
+instant = { version ="0.1.12", features = ['wasm-bindgen'] }
 
 [target.'cfg(not(any(target_arch = "bpf", target_arch = "wasm32")))'.dependencies]
 tokio = { version = "1.20.1", default-features = false, features = ['io-util','time','sync','macros','rt'] }
+
+[target.'cfg(target_arch = "bpf")'.dependencies]
+solana-program = {path = "../solana/sdk/program"}
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2.79"

@@ -125,13 +125,18 @@ pub fn macro_handler(_attr: TokenStream, item: TokenStream) -> TokenStream {
         }
     }
 
-    let result = quote!{
-
+    let enum_decl = quote!{
         pub enum #enum_name {
             #( #entries ),*
         }
+    };
 
-        #[cfg(not(target_arch = "bpf"))]
+    // #[cfg(target_arch = "bpf")]
+    // let enum_impl = quote!{};
+
+    // #[cfg(not(target_arch = "bpf"))]
+    let enum_impl = quote!{
+
         impl #enum_name {
 
             pub fn test() -> bool { true }
@@ -169,7 +174,6 @@ pub fn macro_handler(_attr: TokenStream, item: TokenStream) -> TokenStream {
             }
         }
 
-        #[cfg(not(target_arch = "bpf"))]
         impl workflow_core::enums::EnumTrait<#enum_name> for #enum_name {
             fn list() -> Vec<#enum_name> {
                 #enum_name::list()
@@ -196,12 +200,19 @@ pub fn macro_handler(_attr: TokenStream, item: TokenStream) -> TokenStream {
             }
         }
 
-        #[cfg(not(target_arch = "bpf"))]
         impl std::fmt::Display for #enum_name{
             fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
                 write!(f, "{}", self.as_str())
             }
         }
+
+    };
+    
+    let result = quote!{
+    
+        #enum_decl
+
+        #enum_impl
 
     }.into();
 

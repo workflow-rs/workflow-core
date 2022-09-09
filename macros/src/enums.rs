@@ -25,11 +25,12 @@ impl ToTokens for Enum {
     }
 }
 
-
 pub fn macro_handler(_attr: TokenStream, item: TokenStream) -> TokenStream {
 
     let enum_decl_ast = item.clone();
     let ast = parse_macro_input!(enum_decl_ast as DeriveInput);
+
+    let enum_attrs = &ast.attrs;
 
     let enum_name = &ast.ident;
     let _enum_params = &ast.generics;
@@ -126,15 +127,16 @@ pub fn macro_handler(_attr: TokenStream, item: TokenStream) -> TokenStream {
     }
 
     let enum_decl = quote!{
+        # (#enum_attrs) *
         pub enum #enum_name {
             #( #entries ),*
         }
     };
 
-    // #[cfg(target_arch = "bpf")]
-    // let enum_impl = quote!{};
+    #[cfg(target_arch = "bpf")]
+    let enum_impl = quote!{};
 
-    // #[cfg(not(target_arch = "bpf"))]
+    #[cfg(not(target_arch = "bpf"))]
     let enum_impl = quote!{
 
         impl #enum_name {

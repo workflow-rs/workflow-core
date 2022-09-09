@@ -9,6 +9,8 @@ pub use workflow_core_macros::describe_enum;
 
 cfg_if! {
     if #[cfg(not(target_arch = "bpf"))] {
+        /// Generic 8-byte identifier
+        pub mod id;
         /// task re-exports and shims
         pub mod task;
         /// channel re-exports and shims

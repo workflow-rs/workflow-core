@@ -54,7 +54,7 @@ pub fn macro_handler(_attr: TokenStream, item: TokenStream) -> TokenStream {
     for variant in enum_fields.iter() {
         let name: String = variant.to_token_stream().to_string();
         let attrs: Vec<_> =
-            variant.attrs.iter().filter(|attr| attr.path.is_ident("descr")).collect();
+            variant.attrs.iter().filter(|attr| attr.path.is_ident("descr") || attr.path.is_ident("describe")).collect();
         if attrs.len() > 1 {
             return Error::new_spanned(
                 enum_name,
@@ -166,6 +166,12 @@ pub fn macro_handler(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 match str {
                     #( #strings_ns => { Some(#enum_name::#entries) }),*
                     _ => None
+                }
+            }
+
+            pub fn describe(&self) -> &'static str { 
+                match self {
+                    #( #enum_name::#entries => { #descr.into() }),*
                 }
             }
 

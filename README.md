@@ -1,4 +1,4 @@
-# WORKFLOW-CORE
+## WORKFLOW-CORE
 
 Part of the [WORKFLOW-RS](https://github.com/workflow-rs) application framework.
 
@@ -8,7 +8,7 @@ Collection of utilities and curated re-exports that are able to operate on nativ
 
 Platforms supported: Native, WASM (browser), BPF (bypass)
 
-# Features:
+## Features
 
 * `#[describe_enum]` enum macro attribute offering conversion of enums to and from strings as well as associating a custom description attribute with each of the enum value.
 * `id` module offering a random 64-bit UUID-like base58-encodable identifier representation (useful for DOM element IDs)

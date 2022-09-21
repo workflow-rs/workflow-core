@@ -15,7 +15,8 @@ Utilities and curated re-exports for async rust native and browser development
 crate-type = ["cdylib", "lib"]
 
 [dependencies]
-workflow-core-macros = { path = "macros/" }
+workflow-core-macros = "0.1.0"
+# workflow-core-macros = { path = "macros/" }
 cfg-if = "1.0.0"
 borsh = "0.9.1"
 

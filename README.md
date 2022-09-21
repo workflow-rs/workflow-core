@@ -16,7 +16,7 @@ Platforms supported: Native, WASM (browser), BPF (bypass)
 
 ## Features
 
-* `#[describe_enum]` enum macro attribute offering conversion of enums to and from strings as well as associating a custom description attribute with each of the enum value.
+* `#[describe_enum]` enum macro attribute offering conversion of enums to and from strings as well as associating a custom description attribute with each of the enum values.
 * `id` module offering a random 64-bit UUID-like base58-encodable identifier representation (useful for DOM element IDs)
 * `task` module offering async `spawn()` functionality for async code task execution as well as re-exports following modules:
     * `async_std::channel` (offering unbounded and bounded channels from [async_std](https://crates.io/crates/async-std))

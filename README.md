@@ -12,8 +12,6 @@ Collection of utilities and curated re-exports that are able to operate on nativ
 ![platform](https://img.shields.io/badge/platform-Web%20%28wasm32%29-informational)
 ![platform](https://img.shields.io/badge/platform-BPF%20%28ignores%29-informational)
 
-Platforms supported: Native, WASM (browser), BPF (bypass)
-
 ## Features
 
 * `#[describe_enum]` enum macro attribute offering conversion of enums to and from strings as well as associating a custom description attribute with each of the enum values.

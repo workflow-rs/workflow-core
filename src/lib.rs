@@ -27,5 +27,12 @@ cfg_if! {
         pub mod time {
             pub use instant::*;
         }
+
+        #[cfg(target_arch = "wasm32")]
+        pub use workflow_async_trait::async_trait_without_send as workflow_async_trait;
+
+        #[cfg(not(target_arch = "wasm32"))]
+        pub use workflow_async_trait::async_trait_with_send as workflow_async_trait;
+
     }
 }

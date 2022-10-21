@@ -32,6 +32,12 @@ impl Id {
 
 }
 
+impl From<Id> for String{
+    fn from(id: Id) -> Self {
+        id.to_string()
+    }
+}
+
 impl AsRef<[u8]> for Id {
     fn as_ref(&self) -> &[u8] {
         &self.0[..]

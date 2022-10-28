@@ -25,7 +25,7 @@ borsh = "0.9.1"
 workflow-async-trait = { path = "../workflow-async-trait" }
 
 async-std = { version = "1.12.0", features = ['attributes'] }
-futures = "0.3.21"
+futures = "0.3.25"
 manual_future = "0.1.1"
 thiserror = "1.0.0"
 triggered = "0.1.2"

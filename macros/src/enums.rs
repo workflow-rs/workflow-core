@@ -133,10 +133,10 @@ pub fn macro_handler(_attr: TokenStream, item: TokenStream) -> TokenStream {
         }
     };
 
-    #[cfg(target_arch = "bpf")]
+    #[cfg(target_os = "solana")]
     let enum_impl = quote!{};
 
-    #[cfg(not(target_arch = "bpf"))]
+    #[cfg(not(target_os = "solana"))]
     let enum_impl = quote!{
 
         impl #enum_name {

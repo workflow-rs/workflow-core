@@ -5,7 +5,7 @@ use futures::Future;
 pub use async_std::task::yield_now;
 
 cfg_if! {
-    if #[cfg(not(any(target_arch = "wasm32", target_arch = "bpf")))] {
+    if #[cfg(not(any(target_arch = "wasm32", target_os = "solana")))] {
 
         pub mod native {
             

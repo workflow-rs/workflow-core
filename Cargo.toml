@@ -31,7 +31,7 @@ thiserror = "1.0.0"
 triggered = "0.1.2"
 instant = { version ="0.1.12", features = ['wasm-bindgen'] }
 bs58 = "0.4.0"
-rand = "0.7.3"
+rand = "0.8.5"
 serde = { version = "1.0.144" , features = ["derive"] }
 
 [target.'cfg(not(any(target_os = "solana", target_arch = "wasm32")))'.dependencies]

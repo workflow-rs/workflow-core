@@ -1,6 +1,6 @@
 //!
-//! [`task`] module provides helper functions for use with async closures that operate uniformally
-//! in native (tokio-backed) and WASM (async_std-backed) environments.
+//! [`task`](self) module provides helper functions for use with async closures that operate uniformally
+//! in native ([`tokio`](https://crates.io/crates/tokio)-backed) and WASM ([`async_std`]-backed) environments.
 //! 
 //! Following functions are are available:
 //! - `spawn(Future)` - non-blocking spawn of the supplied async closure
@@ -20,7 +20,7 @@ cfg_if! {
     if #[cfg(not(any(target_arch = "wasm32", target_os = "solana")))] {
 
         pub mod native {
-            
+            //! native implementation
             pub use super::*;
             pub fn spawn<F, T>(future: F)
             where
@@ -45,6 +45,7 @@ cfg_if! {
 // to allow access to wasm::spawn from any target
 // (this is needed for workflow-ux)
 pub mod wasm {
+    //! WASM implementation
     pub use super::*;
     
     pub fn spawn<F, T>(future: F)

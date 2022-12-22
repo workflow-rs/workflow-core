@@ -1,3 +1,7 @@
+//!
+//! 64-bit random identifier struct [`Id`] that renders its value as a base58 string
+//! 
+
 use std::{fmt, str::FromStr};
 use thiserror::Error;
 use serde::{Deserialize, Serialize};
@@ -10,11 +14,13 @@ pub enum Error {
     InvalidBufferSize,
 }
 
+/// 64-bit identifier that renders the value as a base58 string.
+/// This struct is useful for general-purpose random id generation
+/// for use with DOM elements and for other similar purposes.
 #[repr(transparent)]
 #[derive(Clone,Copy,Default,Eq,Hash,Ord,PartialEq,PartialOrd,Serialize,Deserialize)]
 pub struct Id(pub(crate) [u8; 8]);
 
-// Dom Element Id
 impl Id {
     pub fn new() -> Id {
         Id::new_from_slice(&rand::random::<[u8; 8]>())

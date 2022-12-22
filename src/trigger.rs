@@ -1,3 +1,5 @@
+/// re-exports triggered crate as well as
+/// two wrappers SingleTrigger and ReqRespTrigger
 pub use triggered::*;
 
 // use triggered::{Trigger,Listener};

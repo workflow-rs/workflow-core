@@ -1,3 +1,25 @@
+//! 
+//! [`workflow_core`] is a part of the [`workflow-rs`](https://crates.io/workflow-rs) 
+//! framework, subset of which is designed to function uniformally across multiple 
+//! environments including native Rust, WASM-browser and Solana OS targets.
+//! 
+//! [`workflow_core`] provides following modules:
+//! - [`id`] - a random 64-bit id struct that offers [`std::string::ToString`] trait 
+//! which encodes the id as a base58 string (useful for DOM element ids)
+//! - [`enums`] - enum macros for integer to enum conversion as well as an automatic
+//! enum to string conversion.
+//! - [`trigger`] - re-export of [`triggered`](https://crates.io/crates/triggered) with
+//! bi-directional wrappers, helpful for async task even triggering.
+//! - [`task`] - custom [`task::spawn`] and [`task::sleep`] function that provide non-blocking
+//! spawn of `async` closures. These functions operate uniformally in WASM and in native
+//! applications running under [`tokio`](https://crates.io/crates/tokio)
+//! - [`async_trait`] - a custom `async_trait` attribute macros for declaring async traits
+//! that disable `Send` marker in WASM (allowing use of [`wasm-bindgen::JsValue`](https://docs.rs/wasm-bindgen/latest/wasm_bindgen/struct.JsValue.html) 
+//! values inside of async closures).
+//! 
+
+
+
 use cfg_if::cfg_if;
 extern crate self as workflow_core;
 

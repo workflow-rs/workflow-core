@@ -1,3 +1,15 @@
+//!
+//! [`task`] module provides helper functions for use with async closures that operate uniformally
+//! in native (tokio-backed) and WASM (async_std-backed) environments.
+//! 
+//! Following functions are are available:
+//! - `spawn(Future)` - non-blocking spawn of the supplied async closure
+//! - `sleep(Duration)` - suspends the task for a given Duration 
+//! 
+//! Please note that blocking spawn is not available as browser-WASM can
+//! not block task execution due to a single-threaded async environment.
+//! 
+
 #[allow(unused_imports)]
 use cfg_if::cfg_if;
 use futures::Future;
@@ -60,6 +72,7 @@ pub mod wasm {
                 pub fn clear_timeout(interval: u32) -> std::result::Result<(), JsValue>;
             }
 
+            /// Suspends current task for the given [`Duration`]
             pub async fn sleep(duration : Duration) {
                 let (sender, receiver) = crate::channel::oneshot::<()>();
                 let interval = {

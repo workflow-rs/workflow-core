@@ -1,3 +1,7 @@
+//!
+//! Ruse enum conversion utilities
+//! 
+
 
 pub use workflow_core_macros::describe_enum;
 pub trait EnumTrait<T> {

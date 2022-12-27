@@ -13,12 +13,9 @@
 #[allow(unused_imports)]
 use cfg_if::cfg_if;
 use futures::Future;
-#[allow(unused_imports)]
 use std::sync::atomic::{AtomicBool, Ordering};
-#[allow(unused_imports)]
 use std::sync::Arc;
-#[allow(unused_imports)]
-use crate::channel::{oneshot,Sender,Receiver,RecvError,TryRecvError,SendError,TrySendError};
+use crate::channel::{oneshot,Sender,Receiver,RecvError,TryRecvError,SendError};
 pub use async_std::task::yield_now;
 
 use thiserror::Error;
@@ -123,31 +120,27 @@ pub mod wasm {
 #[cfg(target_arch = "wasm32")]
 pub use wasm::*;
 
-/* 
+
 #[derive(Clone)]
 pub struct Task<F,T,P> 
 where
-    F: Future<Output = T> + 'static,
+    F: Future<Output = T> + Send + 'static,
     T: 'static,
     P: Fn(Arc<Box<Receiver<()>>>)->F + Send + Sync + 'static,
 {
     termination : (Sender<()>, Receiver<()>),
     completion : (Sender<()>, Receiver<()>),
     running : Arc<AtomicBool>,
-
-    // task_fn: Arc<Box<dyn Fn(Arc<Box<Receiver<()>>>)->F>>
     task_fn: P
 }
 
 impl<F,T,P> Task<F,T,P>
 where
-    F: Future<Output = T> + 'static,
+    F: Future<Output = T> + Send + 'static,
     T: 'static,
     P: Fn(Arc<Box<Receiver<()>>>)->F + Send + Sync + 'static
 {
 
-    // pub fn new(task_fn: Box<dyn Fn(Arc<Box<Receiver<()>>>)->F>) -> Task<F,T,P> {
-    // pub fn new(task_fn: Box<dyn Fn(Arc<Box<Receiver<()>>>)->F>) -> Task<F,T,P> {
     pub fn new(task_fn: P) -> Task<F,T,P> {
         let terminate = oneshot();
         let completion = oneshot();
@@ -157,86 +150,10 @@ where
             completion,
             running : Arc::new(AtomicBool::new(false)),
             task_fn : task_fn,
-            // task_fn : Arc::new(task_fn),
         }
     }
 
-    async fn run(self : &Arc<Self>) -> TaskResult<()> {
-        while self.completion.1.len() > 0 {
-            self.completion.1.try_recv()?;
-        }
-
-        while self.termination.0.len() > 0 {
-            self.termination.1.try_recv()?;
-        }
-
-        let this = self.clone();
-        // workflow_core::task::spawn(async move {
-        crate::task::spawn(async move {
-            this.running.store(true, Ordering::SeqCst);
-            (this.task_fn)(Arc::new(Box::new(this.termination.1.clone()))).await;
-            this.running.store(false, Ordering::SeqCst);
-            this.completion.0.send(()).await.expect("Error signaling task completion");
-        });
-
-        Ok(())
-    }
-
-    pub async fn terminate(&self) -> TaskResult<()> {
-        if self.running.load(Ordering::SeqCst) {
-            self.termination.0.send(()).await?;
-        }
-        Ok(())
-    }
-
-    pub async fn wait(&self) -> TaskResult<()> {
-        if self.running.load(Ordering::SeqCst) {
-            self.completion.1.recv().await?;
-        }
-        Ok(())
-    }
-
-    pub async fn terminate_and_wait(&self) -> TaskResult<()> {
-        self.terminate().await?;
-        self.wait().await?;
-        Ok(())
-    }
-}
-*/
-
-/*
-#[derive(Clone)]
-pub struct Task<F,T> 
-where
-    F: Future<Output = T> + 'static,
-    T: 'static,
-{
-    termination : (Sender<()>, Receiver<()>),
-    completion : (Sender<()>, Receiver<()>),
-    running : Arc<AtomicBool>,
-
-    task_fn: Arc<Box<dyn Fn(Arc<Box<Receiver<()>>>)->F>>
-}
-
-impl<F,T> Task<F,T>
-where
-    F: Future<Output = T> + 'static,
-    T: 'static,
-{
-
-    pub fn new(task_fn: Box<dyn Fn(Arc<Box<Receiver<()>>>)->F>) -> Task<F,T> {
-        let terminate = oneshot();
-        let completion = oneshot();
-
-        Task {
-            termination: terminate,
-            completion,
-            running : Arc::new(AtomicBool::new(false)),
-            task_fn : Arc::new(task_fn),
-        }
-    }
-
-    async fn run(self : &Arc<Self>) -> TaskResult<()> {
+    pub async fn run(self : &Arc<Self>) -> TaskResult<()> {
         while self.completion.1.len() > 0 {
             self.completion.1.try_recv()?;
         }
@@ -247,6 +164,7 @@ where
 
         let this = self.clone();
         workflow_core::task::spawn(async move {
+        // async_std::task::spawn(async move {
             this.running.store(true, Ordering::SeqCst);
             (this.task_fn)(Arc::new(Box::new(this.termination.1.clone()))).await;
             this.running.store(false, Ordering::SeqCst);
@@ -276,4 +194,3 @@ where
         Ok(())
     }
 }
-*/

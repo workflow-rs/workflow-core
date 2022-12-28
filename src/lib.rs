@@ -17,7 +17,7 @@ extern crate self as workflow_core;
 
 pub mod enums;
 pub mod utils;
-// pub mod time;
+pub mod lookup;
 
 pub use workflow_core_macros::describe_enum;
 

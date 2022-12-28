@@ -8,34 +8,7 @@
 //! key will get queued into a set of futures all of which will resolve once
 //! the initial request is resolved.
 //! 
-//! To use this, you need to create a custom lookup function. The example below
-//! declares a function `lookup()` that uses [`LookupHandler`] to queue requests
-//! and if there are no pending requests (request is new) performs the actual 
-//! request by calling `lookup_impl()`. The [`LookupHandler::complete()`] will
-//! resolve all pending futures for the specifc key.
-//! 
-//! Example:
-//! ```rust
-//! ...
-//! pub lookup_handler : LookupHandler<Pubkey,Arc<AccountDataReference>>
-//! ...
-//! async fn lookup(&self, pubkey:&Pubkey) -> Result<Option<Arc<Data>>> {
-//!     let request_type = self.lookup_handler.queue(pubkey).await;
-//!     let result = match request_type {
-//!         RequestType::New(receiver) => {
-//!             self.reflector.reflect(reflector::Event::PendingLookups(lookup_handler.pending()));
-//! 
-//!             let response = self.lookup_impl(pubkey).await;
-//!             lookup_handler.complete(pubkey, response).await;
-//!             receiver.recv().await?
-//!         },
-//!         RequestType::Pending(receiver) => {
-//!             receiver.recv().await?
-//!         }
-//!     }
-//! };
-//! ```
-//! 
+
 
 use std::sync::Arc;
 use std::sync::atomic::{Ordering, AtomicUsize};
@@ -51,9 +24,39 @@ pub enum RequestType<V,E> {
     Pending(Receiver<LookupResult<V,E>>)
 }
 
-/// LookupHandler - a lookup manager that accumulates futures into
-/// a single key-associated set, resolving all futures in this set 
-/// when the lookup is complete.
+///
+///  [`LookupHandler`] provides ability to queue multiple async requests for the same key
+/// into a group of futures that resolve upon request completion.
+/// 
+/// To use [`LookupHandler`], you need to create a custom lookup function. The example below
+/// declares a function `lookup()` that uses [`LookupHandler`] to queue requests
+/// and if there are no pending requests (request is new) performs the actual 
+/// request by calling `lookup_impl()`. The [`LookupHandler::complete()`] will
+/// resolve all pending futures for the specifc key.
+/// 
+/// Example:
+/// ```rust
+/// ...
+/// pub lookup_handler : LookupHandler<Pubkey,Arc<AccountDataReference>>
+/// ...
+/// async fn lookup(&self, pubkey:&Pubkey) -> Result<Option<Arc<Data>>> {
+///     let request_type = self.lookup_handler.queue(pubkey).await;
+///     let result = match request_type {
+///         RequestType::New(receiver) => {
+///             // execute the actual lookup
+///             let response = self.lookup_impl(pubkey).await;
+///             // signal completion for all awaiting futures
+///             lookup_handler.complete(pubkey, response).await;
+///             // this request is queued like all the others
+///             // so wait for your own notification as well
+///             receiver.recv().await?
+///         },
+///         RequestType::Pending(receiver) => {
+///             receiver.recv().await?
+///         }
+///     }
+/// };
+/// ```
 pub struct LookupHandler<K, V, E> {
     pub map : Arc<Mutex<HashMap<K,Vec<Sender<LookupResult<V,E>>>>>>,
     pending : AtomicUsize,

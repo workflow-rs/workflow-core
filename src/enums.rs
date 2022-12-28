@@ -76,7 +76,7 @@ macro_rules! u32_try_from {
     }
 }
 
-// pub use u32_try_from;
+pub use u32_try_from;
 
 /// 
 /// Associates u16 values to each enum value and declares
@@ -131,7 +131,7 @@ macro_rules! u16_try_from {
     }
 }
 
-// pub use u16_try_from;
+pub use u16_try_from;
 
 ///
 ///  Associates u8 values to each enum value and declares
@@ -180,7 +180,7 @@ macro_rules! u8_try_from {
     }
 }
 
-// pub use u8_try_from;
+pub use u8_try_from;
 
 ///
 ///  Associates usize values to each enum value and declares
@@ -228,4 +228,4 @@ macro_rules! usize_try_from {
     }
 }
 
-// pub use usize_try_from;
+pub use usize_try_from;

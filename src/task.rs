@@ -72,16 +72,12 @@ pub mod wasm {
     
     pub use async_std::task::yield_now;
 
-
     pub fn spawn<F, T>(future: F)
     where
     F: Future<Output = T> + 'static,
     T: 'static,
     {
-        // wasm32 spawn shim
-        // spawn and spawn_local are currently not available on wasm32 architectures
-        // ironically, block_on is but it spawns a task instead of blocking it
-        async_std::task::block_on(async move { future.await });
+        async_std::task::Builder::new().local(future).unwrap();
     }
     
     cfg_if! {

@@ -17,7 +17,8 @@ crate-type = ["cdylib", "lib"]
 [features]
 # enables task::wasm module on native builds
 wasm = ["dep:async-std"]
-default = []
+default = ["wasm"]
+# default = []
 
 [dependencies]
 
@@ -39,7 +40,7 @@ bs58 = "0.4.0"
 rand = "0.8.5"
 getrandom = {version = "^0.2", features=["js"]}
 serde = { version = "1.0.144" , features = ["derive"] }
-async-std = { version = "1.12.0", optional = true }
+async-std = { version = "1.12.0", optional = true, features = ["unstable"] }
 
 [target.'cfg(not(any(target_os = "solana", target_arch = "wasm32")))'.dependencies]
 tokio = { version = "1.23.0", default-features = false, features = ['io-util','time','sync','macros','rt'] }

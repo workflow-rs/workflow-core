@@ -30,7 +30,7 @@ cfg_if! {
         // channel re-exports and shims
         pub mod channel {
             //! [`async_std::channel`] re-exports and shims
-            pub use async_std::channel::*;
+            pub use async_channel::*;
             /// Creates a oneshot channel (bounded channel with a limit of 1 message)
             pub fn oneshot<T>() -> (Sender<T>,Receiver<T>) {
                 bounded(1)

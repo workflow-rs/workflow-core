@@ -16,7 +16,6 @@ use futures::Future;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use crate::channel::{oneshot,Sender,Receiver,RecvError,TryRecvError,SendError};
-pub use async_std::task::yield_now;
 
 use thiserror::Error;
 
@@ -45,6 +44,10 @@ cfg_if! {
         pub mod native {
             //! native implementation
             pub use super::*;
+
+            pub use tokio::task::yield_now;
+            pub use tokio::time::sleep;
+
             pub fn spawn<F, T>(future: F)
             where
             F: Future<Output = T> + Send + 'static,
@@ -55,8 +58,6 @@ cfg_if! {
                     future.await
                 });
             }
-        
-            pub use async_std::task::sleep;
         }
 
         pub use native::*;
@@ -64,13 +65,14 @@ cfg_if! {
 }
 
 
-// we explicitly must retain this in native
-// to allow access to wasm::spawn from any target
-// (this is needed for workflow-ux)
+#[cfg(feature = "wasm")]
 pub mod wasm {
     //! WASM implementation
     pub use super::*;
     
+    pub use async_std::task::yield_now;
+
+
     pub fn spawn<F, T>(future: F)
     where
     F: Future<Output = T> + 'static,
@@ -114,6 +116,8 @@ pub mod wasm {
                 clear_timeout(interval).unwrap();
             
             } 
+        } else {
+            pub use async_std::task::sleep;
         }
     }   
 }

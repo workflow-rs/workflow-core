@@ -18,7 +18,7 @@ use std::hash::Hash;
 use crate::channel::*;
 
 /// Custom result type used by [`LookupHandler`]
-pub type LookupResult<V,E> = std::result::Result<Option<V>,E>;
+pub type LookupResult<V,E> = std::result::Result<V,E>;
 pub enum RequestType<V,E> {
     New(Receiver<LookupResult<V,E>>),
     Pending(Receiver<LookupResult<V,E>>)
@@ -37,7 +37,7 @@ pub enum RequestType<V,E> {
 /// Example:
 /// ```rust
 /// ...
-/// pub lookup_handler : LookupHandler<Pubkey,Arc<AccountDataReference>>
+/// pub lookup_handler : LookupHandler<Pubkey,Arc<Data>,Error>
 /// ...
 /// async fn lookup(&self, pubkey:&Pubkey) -> Result<Option<Arc<Data>>> {
 ///     let request_type = self.lookup_handler.queue(pubkey).await;
@@ -106,9 +106,13 @@ where
     /// Signal the lookup completion for key `K` by supplying a [`LookupResult`] 
     /// with a resulting value `V` or an error `E`.
     pub async fn complete(&self, key : &K, result : LookupResult<V,E>) {
-        let mut pending = self.map.lock().unwrap();
+        // let mut pending = self.map.lock().unwrap();
 
-        if let Some(list) = pending.remove(&key) {
+        let list = {
+            self.map.lock().unwrap().remove(&key)
+        };
+
+        if let Some(list) = list { //pending.remove(&key) {
             self.pending.fetch_sub(1, Ordering::Relaxed);
             for sender in list {
                 sender.send(result.clone()).await.expect("Unable to complete lookup result");
